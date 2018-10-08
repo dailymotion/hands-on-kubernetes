@@ -1,0 +1,17 @@
+kind: ReplicaSet
+apiVersion: apps/v1
+metadata:
+  name: kubernetes-up-and-running
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      pod: kubernetes-up-and-running
+  template:
+    metadata:
+      labels:
+        pod: kubernetes-up-and-running
+    spec:
+      containers:
+      - name: kuar
+        image: gcr.io/kuar-demo/kuard-amd64:1
