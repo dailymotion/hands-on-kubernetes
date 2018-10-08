@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  generateName: kubernetes-up-and-running-with-requests-
+spec:
+  containers:
+  - name: kuar
+    image: gcr.io/kuar-demo/kuard-amd64:1
+    resources:
+     requests:
+       cpu: 16

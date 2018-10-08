@@ -1,0 +1,10 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: duplicate-containers
+spec:
+  containers:
+  - name: one
+    image: gcr.io/kuar-demo/kuard-amd64:1
+  - name: two
+    image: gcr.io/kuar-demo/kuard-amd64:1

@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  generateName: kubernetes-up-and-running-with-limits-
+spec:
+  containers:
+  - name: kuar
+    image: gcr.io/kuar-demo/kuard-amd64:1
+    resources:
+     limits:
+       memory: 256M
