@@ -1,6 +1,23 @@
 # Kubernetes Pods
 
+* [Intro](#intro)
+* [Creating a pod](#creating-a-pod)
+* [Listing pods](#listing-pods)
+* [Describing pods](#describing-pods)
+* [Accessing logs](#accessing-logs)
+* [Connecting to a pod](#connecting-to-a-pod)
+* [Editing a pod](#editing-a-pod)
+* [Deleting pods](#deleting-pods)
+* [Creating multiple pods](#creating-multiple-pods)
+* [Watching pods](#watching-pods)
+* [Pods resources](#pods-resources)
+* [Pods events](#pods-events)
+
+## Intro
+
 A [pod](https://kubernetes.io/docs/concepts/workloads/pods/) is a collection of (Docker) containers that share some resources - mainly the same network and file system. It comes from the observation that an application can be composed of different parts (proxy, frontend, backend, ...), each part being a container. And so it is easier to manipulate all those containers as one single entity: a Pod. So in Kubernetes, the basic entity that is deployed is a Pod.
+
+## Creating a pod
 
 Let's create some pods! For that, we will use the `kubectl create` command. Let's start with its documentation:
 
@@ -44,6 +61,8 @@ $ kubectl create -f kubernetes-up-and-running-pod.yml
 
 If it fails, fix your descriptor and try again ;-) The solution can be found at [kubernetes-up-and-running-pod.yml](kubernetes-up-and-running-pod.yml)
 
+## Listing pods
+
 Good, so now you should have a running pod! You can see it by running:
 
 ```
@@ -74,6 +93,8 @@ $ kubectl get pod kubernetes-up-and-running -o yaml
 
 We can see that the YAML definition is now quite more complex than what we gave to Kubernetes! This is because we just wrote the minimum required fields to have a valid descriptor, but then Kubernetes added some default values - and there are quite a few of them. You can go through the [Pod definition in the Kubernetes API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#pod-v1-core) to read the documentation for some of those fields - for example the `imagePullPolicy` or `restartPolicy` ones.
 
+## Describing pods
+
 Another nice alternative of the `kubectl get` command for a single resource is the `kubectl describe` command:
 
 ```
@@ -81,6 +102,8 @@ $ kubectl describe pod kubernetes-up-and-running
 ```
 
 Nice, isn't it? I knew you would love it ;-) The `describe` output is made for humans, and aggregates data from multiple sources to present you a nice view.
+
+## Accessing logs
 
 Now let's have a look at the logs, with the `kubectl logs` command:
 
@@ -91,6 +114,8 @@ $ kubectl logs kubernetes-up-and-running
 We can see that the `kubernetes-up-and-running` application in our container listen on port `8080`.
 
 Side node about logging: we can see the application's logs that way, because it writes logs to `stdout`, which is the recommanded way to write logs in containers - see [12-factor apps](https://12factor.net/logs) for more on that topic. So basically `kubectl logs` will connect you to the `stdout` of your container.
+
+## Connecting to a pod
 
 Now, let's try to make an HTTP request to the application, to make sure that it's really deployed and available. We will use the `kubectl port-forward` command to forward a local port to a remote port on our pod:
 
@@ -141,6 +166,8 @@ $ kubectl exec -it duplicate-containers -c one sh
 
 So, we are now in a Shell inside the container. If you run `ls` to inspect the filesystem, you can see the `kuard` binary. Guess that's what we're looking for ;-) So let's see the list of supported flags by running `./kuard -h`. Hummm, `--address`, with a default value of `:8080`. That's what we need to change!
 
+## Editing a pod
+
 So we will configure the arguments passed to the binary when starting the second container, to use a different port. If we look at the [Container definition in the Kubernetes API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#container-v1-core), we can see that there is an `args` field, that can be set to an array of arguments to pass to the entrypoint. Let's try to edit the pod spec with the `kubectl edit` command:
 
 ```
@@ -184,6 +211,8 @@ $ kubectl create -f duplicate-containers-with-custom-port.yml
 
 and make sure that this time it is working. The `kubectl describe` command should tell you that the second container has the right arguments, and if you have a look at the logs you can confirm that the application is listening on the right port.
 
+## Deleting pods
+
 Now let's delete our `duplicate-containers` pod. We can use the `kubectl delete` command again:
 
 ```
@@ -191,6 +220,8 @@ $ kubectl delete pod duplicate-containers
 ```
 
 and then check with `kubectl get pods` that it is gone. You should have only 1 pod: the `kubernetes-up-and-running` pod.
+
+## Creating multiple pods
 
 Now, what if we wanted to deploy more than 1 instance of our `kubernetes-up-and-running` pod? Let's see if we can just create a second pod, based on the same `kubernetes-up-and-running-pod.yml` descriptor file. Because it's a different pod, we shouldn't have any port-conflict issue.
 
@@ -206,6 +237,8 @@ $ kubectl create -f kubernetes-up-and-running-generic-pod.yml
 
 Check with the `kubectl get pods` command... You now have a new pod with a random name, thanks to the `generateName` field. So we should now be able to create more than 1 instance of this pod! Go, test it by running multiple times the latest `kubectl create` command, and check the result with the `kubectl get pods` command.
 
+## Watching pods
+
 You can even see live the new pods being deployed, if you "watch" for changes, using the `-w` (or `--watch`) flag on `kubectl get`: in a terminal, run the following command:
 
 ```
@@ -215,6 +248,8 @@ $ kubectl get pods -w
 It will list the current pods, but won't return right away. Leave it running, and in another terminal, create one more pod, and then come back to the previous terminal. You should see new output, with a new pod name, and different statuses each time: that's because Kubernetes will tell you each time the pod has changed.
 
 But in fact you won't manually create pods like that. Instead you will use more high-levels concepts, like the [replicaset](../rs/README.md), that we will see in the next section.
+
+## Pods resources
 
 But before, we'll look at one more features of the pods: the resources. You might know that one of the benefits we get from containers is better resources management: you can limit the resources used by a specific container, so that it doesn't take all the resources of the underlying host.
 
@@ -268,6 +303,27 @@ Events:
 So clearly our pod couldn't be scheduled to a node, because Kubernetes couldn't find a node with sufficient resources (CPU). It will retry until either the finds a node with enough resources, or the pod is killed. There are usually 2 ways to find a node with enough resources:
 - delete running pods, until there is enough free resources for the new pod to run
 - or add a new node. This is usually a manual operation, but on Cloud-operated Kubernetes clusters, for example GKE, it can be done automatically: you setup a node-pool with the auto-scaling feature enabled, and when Kubernetes will fail to schedule a pod on an existing node, it will try to create a new node.
+
+This is why it is very important to always define requests and limits for both CPU and memory, with something like:
+
+```
+spec:
+  containers:
+  - name: ...
+    resources:
+      requests:
+        cpu: 500m
+        memory: 256M
+      limits:
+        cpu: 2
+        memory: 1024M
+```
+
+Not setting the right requests/limits resoureces on your pods will not only affect you, but also all other users of the Kubernetes cluster.
+
+Note that in this *hands-on* we won't define the pods resources, to keep descriptors as minimal as possible, but in real life you should always do it. And some IDE integrations will warn you if you don't do it.
+
+## Pods events
 
 One more thing before closing this chapter on pods: we just saw that there are pod-related events. In fact, in Kubernetes, there are events for everything. You can see them as any other resource, using `kubectl get`:
 
