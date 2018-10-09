@@ -17,6 +17,8 @@ In order to follow this *hands-on*, you need an access to a running Kubernetes c
 
 If you don't already have the `kubectl` client installed, it's time to [install it](https://kubernetes.io/docs/tasks/tools/install-kubectl/), and also maybe [configure it](https://kubernetes.io/docs/tasks/tools/install-kubectl/#configure-kubectl).
 
+**To follow this *hands-on*, you will need `kubectl` >= 1.11**. You can check it by running `kubectl version`.
+
 At this point, you should have a locally setup `kubectl` client. So running `kubectl cluster-info` should be working, and return information from the right cluster.
 
 Before we continue, it would be a good idea to take a little time to [setup the shell autocompletion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion).
