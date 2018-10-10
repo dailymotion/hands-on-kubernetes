@@ -36,4 +36,4 @@ $ kubectl delete namespace hands-on
 
 and it will also delete all resources created in this namespace.
 
-But before deleting our namespace, let's put some resources in it, starting with [some pods](../pod/README.md)!
+**But don't do it now!** Otherwise you will have to re-create it again. Because before deleting our namespace, we'll put some resources in it, starting with [some pods](../pod/README.md)!
