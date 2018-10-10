@@ -57,7 +57,7 @@ $ kubectl options
 You can see for example the `-v` option, which controls the log level. The "level" here is an integer. The higher the value, the more verbose the output. For example, let's try the `api-resources` command, but with an increased log level, like:
 
 ```
-$ kubectl options -v 10
+$ kubectl api-resources -v 10
 ```
 
 It will display a lot of things, and mainly for each API call to the Kubernetes master, the full request and response. Notice how for each API call, it will output a `curl` command, so that you can run the same call yourself (yes, there are lots of ideas/inspirations to take from Kubernetes!)
