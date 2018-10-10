@@ -30,6 +30,8 @@ And if you have a little more time to spend on setup, you can also install a Kub
 
 You'll be writing quite a few YAML files, and having autocompletion / integrated documentation in your IDE will save you a lot of time!
 
+One more thing before starting: if you find any mistake, typo, unclear sentence, missing information, or whatever else you'd like to fix, please feel free to do it. Open a PR, and improve this *hands-on* for the next people that will use it. Collaborative work!
+
 Ok, so now that you are all setup, let's start by discovering how the `kubectl` client works, by running the following command:
 
 ```
