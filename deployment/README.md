@@ -110,3 +110,5 @@ A deployment can be scaled up/down the same way a replicaset is scaled: by editi
 ```
 $ kubectl scale deployment kubernetes-up-and-running --replicas=3
 ```
+
+Ok, so now we have 3 running pods. Maybe it's time to actually use them, and access our web application through a [service](../svc-ep/README.md)!
