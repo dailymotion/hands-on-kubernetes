@@ -238,4 +238,4 @@ But how does it work, internally? Kubernetes will watch for pods matching the co
 
 So it's not because you are requesting a specific node that your request will be handled by a pod on this node. The request might well be forwarded to a pod on a different node.
 
-Another important thing to keep in mind, is that the services works at the transport level - layer 4 of the OSI model. Which is TCP/UDP in our case. So you won't be able to configure things like SSL, or do host or path-based matching. Those require working at the application level - layer 7 of the OSI model, which is HTTP. Using Ingress!
+Another important thing to keep in mind, is that the services works at the transport level - layer 4 of the OSI model. Which is TCP/UDP in our case. So you won't be able to configure things like SSL, or do host or path-based matching. Those require working at the application level - layer 7 of the OSI model, which is HTTP. Using [Ingress](../ingress/README.md)!
