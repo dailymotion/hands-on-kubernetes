@@ -28,12 +28,10 @@ So if you run the `kubectl config get-contexts` now, you will that our current c
 
 Note that even if by default, the `hands-on` namespace will be use, you can always force a specific namespace for a command, by using the `--namespace` flag.
 
-At the end of the hands-on, if you want to delete everything, you can run:
+At the end of the hands-on, if you want to delete everything, you can use the `kubectl delete` command to delete the namespace. **But don't do it now!** Otherwise you will have to re-create it again. Here is how you can delete the `hands-on` namespace, and all the resources created in it - **But don't do it now!**
 
 ```
 $ kubectl delete namespace hands-on
 ```
 
-and it will also delete all resources created in this namespace.
-
-**But don't do it now!** Otherwise you will have to re-create it again. Because before deleting our namespace, we'll put some resources in it, starting with [some pods](../pod/README.md)!
+So before deleting our namespace, let's put some resources in it, starting with [some pods](../pod/README.md)!
